@@ -152,11 +152,11 @@ if operatingSystem is "Windows":
 
     # Downloading Pgsql code
     if configFile.pgSql == 1:
-        # downloadFile = windows.srcDownloads.downloadFile.DownloadFile()
+        downloadFile = windows.srcDownloads.downloadFile.DownloadFile()
         for version in configFile.decoded['v']:
-        #     link = "https://ftp.postgresql.org/pub/source/v" + version['fullVersion'] + "/postgresql-" + version[
-        #         'fullVersion'] + ".tar.gz"
-        #     # downloadFile.downloadFile(link, "postgres-"+version['fullVersion']+".tar.gz")
+            link = "https://ftp.postgresql.org/pub/source/v" + version['fullVersion'] + "/postgresql-" + version[
+                'fullVersion'] + ".tar.gz"
+            downloadFile.downloadFile(link, "postgres-"+version['fullVersion']+".tar.gz")
 
             installSoftware.unzipPostgres(version['fullVersion'])
 
@@ -223,16 +223,36 @@ if operatingSystem is "Windows":
         time.sleep(3)
         resultBuild = buildProc.startBuildProcess(version['fullVersion'])
         if resultBuild == 0:
+
             print("\n\nRunning regression ...")
             time.sleep(3)
             #resultRegression = regressionProc.startRegresstion(version['fullVersion'])
             resultRegression = 0
             if resultRegression == 0:
+
                 print("\n\nRunning instalation ...")
                 time.sleep(3)
                 resultInstallation = instalationProc.startInstation(version['fullVersion'], version['majorVersion'])
                 if resultInstallation == 0:
-                    print("Automation Process is completed successfully")
+                    # Add postgis support
+                    print("Adding postgis support ...")
+                    src = pathVariable.rootDirectory + "\\winShareLib\\postgis"
+                    dest = pathVariable.rootDirectory + "\\workDir\\" + savedDateTime + "\\" + version[
+                        'fullVersion'] + "\\build\\" + version['majorVersion']
+                    copyFile.copy(src, dest)
+
+                    # copying documentation into installation directory
+                    print("copying documentation files ...")
+                    for version in configFile.decoded['v']:
+                        # documentation
+                        src = pathVariable.rootDirectory + "\\workDir\\" + savedDateTime + "\\" + version[
+                            "fullVersion"] + "\\src\\postgresql-" + version["fullVersion"] \
+                              + "\\doc\\src\\sgml\\html"
+                        dest = pathVariable.rootDirectory + "\\workDir\\" + savedDateTime + "\\" + version[
+                            'fullVersion'] + "\\build\\" + version['majorVersion'] + "\\doc"
+                        copyFile.copy(src, dest)
+                    time.sleep(3)
+
                 else:
                     print("Something went wrong with installation process please refer to install log file to see details")
             else:
@@ -240,18 +260,8 @@ if operatingSystem is "Windows":
         else:
             print("Something went wrong with build process please refer to build log file to see details")
 
-        # copying documentation into installation directory
-        print("copying documentation files ...")
-        for version in configFile.decoded['v']:
-            # documentation
-            src = pathVariable.rootDirectory + "\\workDir\\"+savedDateTime+"\\"+ version["fullVersion"]+ "\\src\\postgresql-"+version["fullVersion"]\
-                  +"\\doc\\src\\sgml\\html"
-            dest = pathVariable.rootDirectory + "\\workDir\\" + savedDateTime + "\\" + version[
-                'fullVersion'] + "\\build\\" + version['majorVersion']+ "\\doc"
-            copyFile.copy(src, dest)
-        time.sleep(3)
 
 elif operatingSystem is "Linux":
-    print("downloading postgresql source code ...")
+    print("...")
 else:
     print("Undefined platform found = ", os);

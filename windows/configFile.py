@@ -5,7 +5,7 @@ class ConfigFile:
 
     pgSql = 1
     # change v to something understandable
-    pgVersions = '{"v": [{"fullVersion": "10.3", "majorVersion": "10", "minerVersion" : "3"} ] }'
+    pgVersions = '{"v": [{"fullVersion": "10.4", "majorVersion": "10", "minerVersion" : "4"} ] }'
     decoded = json.loads(pgVersions)
 
     diff = ["0", "https://excellmedia.dl.sourceforge.net/project/gnuwin32/diffutils/2.8.7-1/diffutils-2.8.7-1.exe",

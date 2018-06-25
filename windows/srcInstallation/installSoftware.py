@@ -26,7 +26,7 @@ class InstallSoftware:
     # Seperatte function for unzip rar
     def unzipPostgres(self, version):
         print("\nUnzipping postgres "+ version+ " ...")
-        fname = pathVariable.rootDirectory + "\\postgresql-" + version + ".tar.gz"
+        fname = pathVariable.rootDirectory + "\\postgres-" + version + ".tar.gz"
         tar = tarfile.open(fname, "r:gz")
         tempPathToExtract = pathVariable.rootDirectory + "\\workDir\\" + savedDateTime + "\\" + version + "\\src"
         tar.extractall(path=tempPathToExtract)
