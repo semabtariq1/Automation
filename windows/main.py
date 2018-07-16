@@ -160,14 +160,6 @@ if operatingSystem is "Windows":
     # Process ends
 
 
-    # Adding quantile support
-    print("copying quantile files ...")
-    for version in configFile.decoded['v']:
-        src = pathVariable.rootDirectory+"\\winShareLib\\quantile"
-        dest = pathVariable.rootDirectory+"\\workDir\\"+savedDateTime+"\\"+version['fullVersion']+"\\src\\postgresql-"+version['fullVersion']+"\\contrib"
-        copyFile.copy(src, dest)
-    time.sleep(3)
-
     # copying openssl and zlib into installation directory
     print("copying openssl and zlib files ...")
     for version in configFile.decoded['v']:
@@ -197,9 +189,11 @@ if operatingSystem is "Windows":
             resultRegression = 0
             if resultRegression == 0:
 
+
                 print("\n\nRunning instalation ...")
                 time.sleep(3)
                 resultInstallation = instalationProc.startInstation(version['fullVersion'], version['majorVersion'])
+
                 if resultInstallation == 0:
                     # Add postgis support
                     print("Adding postgis support ...")
